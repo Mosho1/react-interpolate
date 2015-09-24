@@ -1,6 +1,5 @@
 System.config({
   baseURL: "/",
-  trace: true,
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -14,6 +13,7 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
+  trace: true,
 
   map: {
     "babel": "npm:babel-core@5.8.25",
