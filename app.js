@@ -22,24 +22,22 @@ import React from 'react';
 // 	}
 // };
 
-class Motion extends reactInterpolate.createClass('-c/2 * (cos(PI * t / d) - 1) + b', {
+class Motion extends reactInterpolate.createClass('-(e - b)/2 * (cos(PI * t / d) - 1) + b', {
 	duration: 1000,
-	endValue: 2,
 	map: {
-		c: 2,
 		d: 1000,
-		b: 0,
+		b: v => v || 0
 	}
 }) {}
 
 class App extends React.Component {
 	render() {
+		const x = this.state ? this.state.x : null;
 		return (
 			<div>
-				<button onClick={() => this.forceUpdate()}>clicky</button>
-				<Motion>
+				<button onClick={() => this.setState({x: !x})}>clicky</button>
+				<Motion map={{e: x ? 0 : 2}}>
 					{({value}) => {
-						console.log(value)
 						return <div style={{width: 200, backgroundColor: 'red', height: 100 * value}} />;
 					}}
 				</Motion>

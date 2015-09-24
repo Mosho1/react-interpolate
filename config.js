@@ -22,6 +22,7 @@ System.config({
     "js-expression-eval": "github:silentmatt/js-expression-eval@master",
     "lodash.assign": "npm:lodash.assign@3.2.0",
     "lodash.defaults": "npm:lodash.defaults@3.1.2",
+    "lodash.get": "npm:lodash.get@3.7.0",
     "raf": "npm:raf@3.1.0",
     "react": "npm:react@0.13.3",
     "silentmatt/js-expression-eval": "github:silentmatt/js-expression-eval@master",
@@ -89,10 +90,17 @@ System.config({
       "lodash._basecopy": "npm:lodash._basecopy@3.0.1",
       "lodash.keys": "npm:lodash.keys@3.1.2"
     },
+    "npm:lodash._baseget@3.7.2": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
     "npm:lodash._createassigner@3.1.1": {
       "lodash._bindcallback": "npm:lodash._bindcallback@3.0.1",
       "lodash._isiterateecall": "npm:lodash._isiterateecall@3.0.9",
       "lodash.restparam": "npm:lodash.restparam@3.6.1"
+    },
+    "npm:lodash._topath@3.8.1": {
+      "lodash.isarray": "npm:lodash.isarray@3.0.4",
+      "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:lodash.assign@3.2.0": {
       "lodash._baseassign": "npm:lodash._baseassign@3.2.0",
@@ -102,6 +110,10 @@ System.config({
     "npm:lodash.defaults@3.1.2": {
       "lodash.assign": "npm:lodash.assign@3.2.0",
       "lodash.restparam": "npm:lodash.restparam@3.6.1"
+    },
+    "npm:lodash.get@3.7.0": {
+      "lodash._baseget": "npm:lodash._baseget@3.7.2",
+      "lodash._topath": "npm:lodash._topath@3.8.1"
     },
     "npm:lodash.keys@3.1.2": {
       "lodash._getnative": "npm:lodash._getnative@3.9.1",
