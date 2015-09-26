@@ -19,13 +19,19 @@ System.config({
     "babel": "npm:babel-core@5.8.25",
     "babel-runtime": "npm:babel-runtime@5.8.24",
     "core-js": "npm:core-js@1.1.4",
+    "eventemitter3": "npm:eventemitter3@1.1.1",
     "js-expression-eval": "github:silentmatt/js-expression-eval@master",
     "lodash.assign": "npm:lodash.assign@3.2.0",
     "lodash.defaults": "npm:lodash.defaults@3.1.2",
+    "lodash.defaultsdeep": "npm:lodash.defaultsdeep@3.10.0",
     "lodash.get": "npm:lodash.get@3.7.0",
+    "lodash.mapvalues": "npm:lodash.mapvalues@3.0.1",
+    "lodash.omit": "npm:lodash.omit@3.1.0",
+    "lodash.set": "npm:lodash.set@3.7.4",
     "raf": "npm:raf@3.1.0",
     "react": "npm:react@0.13.3",
     "silentmatt/js-expression-eval": "github:silentmatt/js-expression-eval@master",
+    "tiny-emitter": "npm:tiny-emitter@1.0.0",
     "github:jspm/nodelibs-buffer@0.1.0": {
       "buffer": "npm:buffer@3.5.0"
     },
@@ -90,13 +96,47 @@ System.config({
       "lodash._basecopy": "npm:lodash._basecopy@3.0.1",
       "lodash.keys": "npm:lodash.keys@3.1.2"
     },
+    "npm:lodash._basecallback@3.3.1": {
+      "lodash._baseisequal": "npm:lodash._baseisequal@3.0.7",
+      "lodash._bindcallback": "npm:lodash._bindcallback@3.0.1",
+      "lodash.isarray": "npm:lodash.isarray@3.0.4",
+      "lodash.pairs": "npm:lodash.pairs@3.0.1",
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:lodash._basedifference@3.0.3": {
+      "lodash._baseindexof": "npm:lodash._baseindexof@3.1.0",
+      "lodash._cacheindexof": "npm:lodash._cacheindexof@3.0.2",
+      "lodash._createcache": "npm:lodash._createcache@3.1.2"
+    },
+    "npm:lodash._baseflatten@3.1.4": {
+      "lodash.isarguments": "npm:lodash.isarguments@3.0.4",
+      "lodash.isarray": "npm:lodash.isarray@3.0.4"
+    },
+    "npm:lodash._basefor@3.0.2": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
     "npm:lodash._baseget@3.7.2": {
       "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:lodash._baseisequal@3.0.7": {
+      "lodash.isarray": "npm:lodash.isarray@3.0.4",
+      "lodash.istypedarray": "npm:lodash.istypedarray@3.0.2",
+      "lodash.keys": "npm:lodash.keys@3.1.2"
     },
     "npm:lodash._createassigner@3.1.1": {
       "lodash._bindcallback": "npm:lodash._bindcallback@3.0.1",
       "lodash._isiterateecall": "npm:lodash._isiterateecall@3.0.9",
       "lodash.restparam": "npm:lodash.restparam@3.6.1"
+    },
+    "npm:lodash._createcache@3.1.2": {
+      "lodash._getnative": "npm:lodash._getnative@3.9.1"
+    },
+    "npm:lodash._pickbyarray@3.0.2": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:lodash._pickbycallback@3.0.0": {
+      "lodash._basefor": "npm:lodash._basefor@3.0.2",
+      "lodash.keysin": "npm:lodash.keysin@3.0.8"
     },
     "npm:lodash._topath@3.8.1": {
       "lodash.isarray": "npm:lodash.isarray@3.0.4",
@@ -111,14 +151,68 @@ System.config({
       "lodash.assign": "npm:lodash.assign@3.2.0",
       "lodash.restparam": "npm:lodash.restparam@3.6.1"
     },
+    "npm:lodash.defaultsdeep@3.10.0": {
+      "lodash.merge": "npm:lodash.merge@3.3.2",
+      "lodash.restparam": "npm:lodash.restparam@3.6.1"
+    },
     "npm:lodash.get@3.7.0": {
       "lodash._baseget": "npm:lodash._baseget@3.7.2",
       "lodash._topath": "npm:lodash._topath@3.8.1"
+    },
+    "npm:lodash.isplainobject@3.2.0": {
+      "lodash._basefor": "npm:lodash._basefor@3.0.2",
+      "lodash.isarguments": "npm:lodash.isarguments@3.0.4",
+      "lodash.keysin": "npm:lodash.keysin@3.0.8"
     },
     "npm:lodash.keys@3.1.2": {
       "lodash._getnative": "npm:lodash._getnative@3.9.1",
       "lodash.isarguments": "npm:lodash.isarguments@3.0.4",
       "lodash.isarray": "npm:lodash.isarray@3.0.4"
+    },
+    "npm:lodash.keysin@3.0.8": {
+      "lodash.isarguments": "npm:lodash.isarguments@3.0.4",
+      "lodash.isarray": "npm:lodash.isarray@3.0.4"
+    },
+    "npm:lodash.mapvalues@3.0.1": {
+      "lodash._basecallback": "npm:lodash._basecallback@3.3.1",
+      "lodash._basefor": "npm:lodash._basefor@3.0.2",
+      "lodash.keys": "npm:lodash.keys@3.1.2"
+    },
+    "npm:lodash.merge@3.3.2": {
+      "lodash._arraycopy": "npm:lodash._arraycopy@3.0.0",
+      "lodash._arrayeach": "npm:lodash._arrayeach@3.0.0",
+      "lodash._createassigner": "npm:lodash._createassigner@3.1.1",
+      "lodash._getnative": "npm:lodash._getnative@3.9.1",
+      "lodash.isarguments": "npm:lodash.isarguments@3.0.4",
+      "lodash.isarray": "npm:lodash.isarray@3.0.4",
+      "lodash.isplainobject": "npm:lodash.isplainobject@3.2.0",
+      "lodash.istypedarray": "npm:lodash.istypedarray@3.0.2",
+      "lodash.keys": "npm:lodash.keys@3.1.2",
+      "lodash.keysin": "npm:lodash.keysin@3.0.8",
+      "lodash.toplainobject": "npm:lodash.toplainobject@3.0.0"
+    },
+    "npm:lodash.omit@3.1.0": {
+      "lodash._arraymap": "npm:lodash._arraymap@3.0.0",
+      "lodash._basedifference": "npm:lodash._basedifference@3.0.3",
+      "lodash._baseflatten": "npm:lodash._baseflatten@3.1.4",
+      "lodash._bindcallback": "npm:lodash._bindcallback@3.0.1",
+      "lodash._pickbyarray": "npm:lodash._pickbyarray@3.0.2",
+      "lodash._pickbycallback": "npm:lodash._pickbycallback@3.0.0",
+      "lodash.keysin": "npm:lodash.keysin@3.0.8",
+      "lodash.restparam": "npm:lodash.restparam@3.6.1"
+    },
+    "npm:lodash.pairs@3.0.1": {
+      "lodash.keys": "npm:lodash.keys@3.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:lodash.set@3.7.4": {
+      "lodash._topath": "npm:lodash._topath@3.8.1",
+      "lodash.isarray": "npm:lodash.isarray@3.0.4",
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:lodash.toplainobject@3.0.0": {
+      "lodash._basecopy": "npm:lodash._basecopy@3.0.1",
+      "lodash.keysin": "npm:lodash.keysin@3.0.8"
     },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.1"

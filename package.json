@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jspm": "^0.16.9",
+    "jspm": "^0.16.10",
     "raf": "^3.1.0",
     "react": "^0.13.3",
     "systemjs": "^0.19.0"
@@ -19,13 +19,19 @@
   },
   "jspm": {
     "dependencies": {
+      "eventemitter3": "npm:eventemitter3@^1.1.1",
       "js-expression-eval": "github:silentmatt/js-expression-eval@master",
       "lodash.assign": "npm:lodash.assign@^3.2.0",
       "lodash.defaults": "npm:lodash.defaults@^3.1.2",
+      "lodash.defaultsdeep": "npm:lodash.defaultsdeep@^3.10.0",
       "lodash.get": "npm:lodash.get@^3.7.0",
+      "lodash.mapvalues": "npm:lodash.mapvalues@^3.0.1",
+      "lodash.omit": "npm:lodash.omit@^3.1.0",
+      "lodash.set": "npm:lodash.set@^3.7.4",
       "raf": "npm:raf@^3.1.0",
       "react": "npm:react@^0.13.3",
-      "silentmatt/js-expression-eval": "github:silentmatt/js-expression-eval@master"
+      "silentmatt/js-expression-eval": "github:silentmatt/js-expression-eval@master",
+      "tiny-emitter": "npm:tiny-emitter@^1.0.0"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
