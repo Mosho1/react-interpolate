@@ -1,1 +1,2 @@
-import 'tests/simplifier';
+// import './tests/simplifier';
+import './tests/interpolator';
