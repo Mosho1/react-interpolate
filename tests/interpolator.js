@@ -27,7 +27,8 @@ export default async () => {
 				durationVariable: 'd',
 				timeVariable: 't',
 				endVariable: 'e',
-				startTime: 0
+				startTime: 0,
+				previousPrefix: 'p_'
 			};
 
 			assertEqual(interpolator.setProps(), interpolator);
