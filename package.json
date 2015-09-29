@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bluebird": "^2.10.1",
     "deep-equal": "^1.0.1",
     "jspm": "^0.16.10",
     "pretty-json": "^0.1.1",

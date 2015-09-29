@@ -1,12 +1,12 @@
-import {dummy, spy, describeAsync, assertEqual, assert, it, itAsync} from '../lib/unit-tester';
+import {dummy, spy, describe, assertEqual, assert, it, itAsync} from '../lib/unit-tester';
 import Interpolator from '../lib/interpolator';
 import Promise from 'bluebird';
 
 doTests();
 
 async function doTests() {
-	await describeAsync('Expression interpolator - unit tests', async () => {
-		it('should set and emit state, and return this', () => {
+	await describe('Expression interpolator - unit tests', async () => {
+		await it('should set and emit state, and return this', () => {
 			let interpolator = new Interpolator(), state;
 			interpolator.on('stateChange', s => state = s);
 			assertEqual(interpolator.setState(), interpolator);
@@ -22,7 +22,7 @@ async function doTests() {
 			assertEqual(state, {a: 1});
 		});
 
-		it('should set default options', () => {
+		await it('should set default options', () => {
 			let interpolator = new Interpolator();
 			const defaultOptions = {
 				resultVariable: 'v',
@@ -43,7 +43,7 @@ async function doTests() {
 
 		});
 
-		await itAsync('should interpolate values', async () => {
+		await it('should interpolate values', async () => {
 			let interpolator = new Interpolator();
 			let results, duration;
 			interpolator.handleResults = r => results = r;
@@ -73,7 +73,7 @@ async function doTests() {
 			assert(Math.abs(results.v - results.t * 2) < 1);
 		});
 
-		it('should handle results', () => {
+		await it('should handle results', () => {
 			let interpolator = new Interpolator();
 			interpolator.cancel = dummy();
 			interpolator.handleResults({});
@@ -89,13 +89,13 @@ async function doTests() {
 	});
 
 
-	await describeAsync('Expression interpolator - e2e tests', async () => {
+	await describe('Expression interpolator - e2e tests', async () => {
 
 		let state;
 		let duration = 100;
 		let interpolator = new Interpolator({
 			expressions: {
-				v: '2 * t + 100',
+				v: '2 * t + 100'
 			},
 			duration: 100
 		});
@@ -103,7 +103,7 @@ async function doTests() {
 		interpolator.cancel = spy(interpolator.cancel);
 		interpolator.handleResults = spy(interpolator.handleResults.bind(interpolator));
 
-		await itAsync('should interpolate expressions, use preset duration', async () => {
+		await it('should interpolate expressions, use preset duration', async () => {
 			interpolator.interpolate();
 			assert(interpolator.isRunning);
 			await Promise.delay(duration + 50);
@@ -111,7 +111,7 @@ async function doTests() {
 			assert(Math.abs(state.v - (2 * state.t + 100)) < 1);
 		});
 
-		await itAsync('should override default expressions, use variable duration', async () => {
+		await it('should override default expressions, use variable duration', async () => {
 			interpolator.init({duration: null});
 			interpolator.interpolate({v: '900 - 2 * t', d: 'v'});
 			assert(interpolator.isRunning);
