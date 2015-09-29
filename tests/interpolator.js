@@ -122,5 +122,20 @@ async function doTests() {
 			assert(Math.abs(state.v - 300) < 10);
 		});
 
+		await it('should use previous values prefixed with p_', async () => {
+			interpolator.init({duration: null});
+			interpolator.interpolate({
+				v: '-(e - b)/2 * (cos(PI * t / d) - 1) + b',
+				d: '1000',
+				b: 'p_v'
+			});
+			assert(interpolator.isRunning);
+			await Promise.delay(250);
+			assert(interpolator.isRunning);
+			await Promise.delay(100);
+			assert(!interpolator.isRunning);
+			assert(Math.abs(state.v - 300) < 10);
+		});
+
 	});
 }
