@@ -32,14 +32,14 @@ async function doTests() {
 				startTime: 0
 			};
 
-			assertEqual(interpolator.setDefaults(), interpolator);
-			assertEqual(interpolator.defaults, defaultOptions);
+			assertEqual(interpolator.setProps(), interpolator);
+			assertEqual(interpolator.props, defaultOptions);
 
-			assertEqual(interpolator.setDefaults({a: 1}), interpolator);
-			assertEqual(interpolator.defaults, Object.assign({a: 1}, defaultOptions));
+			assertEqual(interpolator.setProps({a: 1}), interpolator);
+			assertEqual(interpolator.props, Object.assign({a: 1}, defaultOptions));
 
-			assertEqual(interpolator.setDefaults({startTime: 1}), interpolator);
-			assertEqual(interpolator.defaults, Object.assign({}, defaultOptions, {startTime: 1}));
+			assertEqual(interpolator.setProps({startTime: 1}), interpolator);
+			assertEqual(interpolator.props, Object.assign({}, defaultOptions, {startTime: 1}));
 
 		});
 
