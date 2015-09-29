@@ -2,9 +2,7 @@ import {dummy, spy, describe, assertEqual, assert, it, itAsync} from '../lib/uni
 import Interpolator from '../lib/interpolator';
 import Promise from 'bluebird';
 
-doTests();
-
-async function doTests() {
+export default async () => {
 	await describe('Expression interpolator - unit tests', async () => {
 		await it('should set and emit state, and return this', () => {
 			let interpolator = new Interpolator(), state;
@@ -119,23 +117,42 @@ async function doTests() {
 			assert(interpolator.isRunning);
 			await Promise.delay(100);
 			assert(!interpolator.isRunning);
-			assert(Math.abs(state.v - 300) < 10);
+			assert(Math.abs(state.v - 300) < 40);
 		});
 
 		await it('should use previous values prefixed with p_', async () => {
-			interpolator.init({duration: null});
-			interpolator.interpolate({
-				v: '-(e - b)/2 * (cos(PI * t / d) - 1) + b',
-				d: '1000',
-				b: 'p_v'
-			});
+			const values = [];
+			const firstStop = 500;
+			const duration = 1000;
+			interpolator.init({
+				expressions: {
+					v: '-(e - b)/2 * (cos(PI * t / d) - 1) + b',
+					d: '1000',
+					e: 2,
+					b: 'p_v'
+				}, duration: null, startValue: 0});
+			interpolator.on('stateChange', s => values.push(s.v));
+			interpolator.cancel.reset();
+			interpolator.handleResults.reset();
+			interpolator.interpolate();
 			assert(interpolator.isRunning);
-			await Promise.delay(250);
+			await Promise.delay(firstStop);
 			assert(interpolator.isRunning);
-			await Promise.delay(100);
+			interpolator.interpolate({e: 0});
+			await Promise.delay(1050);
 			assert(!interpolator.isRunning);
-			assert(Math.abs(state.v - 300) < 10);
+			assert(Math.abs(state.v - 0) < 0.1);
+
+			// one for each interpolate, one for finishing duration
+			assertEqual(interpolator.cancel.calls, 3);
+
+			// total run time divided by framerate, give or take 5% (never saw it less by more than 1)
+			assert(interpolator.handleResults.calls >= (firstStop + duration) / 1000 * 60 * 0.95);
+
+			// should have completed half way, then turned back.
+			assert(Math.abs(Math.max(...values) - firstStop / duration * 2) < 1);
+
 		});
 
 	});
-}
+};

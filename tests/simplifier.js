@@ -1,13 +1,12 @@
 import {describe, assertEqual, it} from '../lib/unit-tester';
 import Simplifier from '../lib/simplifier';
-import {Parser} from '../lib/parser';
 import {mapValues} from '../lib/utils';
 
 const stringifyObjectValues = obj => mapValues(obj, v => v.toString());
 
-describe('Expression simplifier', () => {
+export default () => describe('Expression simplifier', async () => {
 	const simplifier = new Simplifier();
-	it('should simplify an expression', () => {
+	await it('should simplify an expression', () => {
 		assertEqual(simplifier.simplifyExpression('a + b').toString(), '(a+b)');
 		assertEqual(simplifier.simplifyExpression('a + b', {a: 1}).toString(), '(1+b)');
 		assertEqual(simplifier.simplifyExpression('a + b', {a: 1, b: 1}).toString(), '2');
@@ -17,7 +16,7 @@ describe('Expression simplifier', () => {
 	});
 
 	let result;
-	it('should simplify an object with one expression', () => {
+	await it('should simplify an object with one expression', () => {
 
 		result = simplifier.simplify({v: 'a + b'});
 		assertEqual(result.expressions.v.toString(), '(a+b)');
@@ -33,7 +32,7 @@ describe('Expression simplifier', () => {
 
 	});
 
-	it('should simplify an object with two independent expressions', () => {
+	await it('should simplify an object with two independent expressions', () => {
 		result = simplifier.simplify({v: 'a + b', d: 1000}, {a: 1, b: 2});
 		assertEqual(result.expressions, {});
 		assertEqual(result.constants, {a: 1, b: 2, v: 3, d: 1000});
@@ -43,7 +42,7 @@ describe('Expression simplifier', () => {
 		assertEqual(result.constants, {a: 1, b: 2, v: 3});
 	});
 
-	it('should simplify an object with two dependent expressions', () => {
+	await it('should simplify an object with two dependent expressions', () => {
 		result = simplifier.simplify({v: 'a + b', d: 'v'}, {a: 1, b: 2});
 		assertEqual(result.expressions, {});
 		assertEqual(result.constants, {a: 1, b: 2, v: 3, d: 3});
@@ -53,7 +52,7 @@ describe('Expression simplifier', () => {
 		assertEqual(result.constants, {a: 1, b: 2, v: 3});
 	});
 
-	it('should simplify an object with many dependent expressions', () => {
+	await it('should simplify an object with many dependent expressions', () => {
 
 		result = simplifier.simplify({
 			t: 'v + a + x',
