@@ -1,73 +1,126 @@
-import {describe, assertEqual, it} from '../lib/unit-tester';
-import Simplifier from '../lib/simplifier';
-import {Parser} from '../lib/parser';
-import {mapValues} from '../lib/utils';
+import {dummy, spy, describeAsync, assertEqual, assert, it, itAsync} from '../lib/unit-tester';
+import Interpolator from '../lib/interpolator';
+import Promise from 'bluebird';
 
-const stringifyObjectValues = obj => mapValues(obj, v => v.toString());
+doTests();
 
-describe('Expression simplifier', () => {
-	const simplifier = new Simplifier();
-	it('should simplify an expression', () => {
-		assertEqual(simplifier.simplifyExpression('a + b').toString(), '(a+b)');
-		assertEqual(simplifier.simplifyExpression('a + b', {a: 1}).toString(), '(1+b)');
-		assertEqual(simplifier.simplifyExpression('a + b', {a: 1, b: 1}).toString(), '2');
-		assertEqual(simplifier.simplifyExpression('2 * a - b', {a: 10, b: 5}).toString(), '15');
-		assertEqual(simplifier.simplifyExpression('1000', {a: 10, b: 5}).toString(), '1000');
-		assertEqual(simplifier.simplifyExpression(1000, {a: 10, b: 5}).toString(), '1000');
-	});
+async function doTests() {
+	await describeAsync('Expression interpolator - unit tests', async () => {
+		it('should set and emit state, and return this', () => {
+			let interpolator = new Interpolator(), state;
+			interpolator.on('stateChange', s => state = s);
+			assertEqual(interpolator.setState(), interpolator);
+			assertEqual(interpolator.state, undefined);
+			assertEqual(state, undefined);
 
-	let result;
-	it('should simplify an object with one expression', () => {
+			assertEqual(interpolator.setState(1), interpolator);
+			assertEqual(interpolator.state, 1);
+			assertEqual(state, 1);
 
-		result = simplifier.simplify({v: 'a + b'});
-		assertEqual(result.expressions.v.toString(), '(a+b)');
-		assertEqual(result.constants, {});
-
-		result = simplifier.simplify({v: 'a + b'}, {a: 1});
-		assertEqual(stringifyObjectValues(result.expressions), {v: '(1+b)'});
-		assertEqual(result.constants, {a: 1});
-
-		result = simplifier.simplify({v: 'a + b'}, {a: 1, b: 2});
-		assertEqual(result.expressions, {});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3});
-
-	});
-
-	it('should simplify an object with two independent expressions', () => {
-		result = simplifier.simplify({v: 'a + b', d: 1000}, {a: 1, b: 2});
-		assertEqual(result.expressions, {});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3, d: 1000});
-
-		result = simplifier.simplify({v: 'a + b', d: 't + 1'}, {a: 1, b: 2});
-		assertEqual(stringifyObjectValues(result.expressions), {d: '(t+1)'});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3});
-	});
-
-	it('should simplify an object with two dependent expressions', () => {
-		result = simplifier.simplify({v: 'a + b', d: 'v'}, {a: 1, b: 2});
-		assertEqual(result.expressions, {});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3, d: 3});
-
-		result = simplifier.simplify({v: 'a + b', d: 'v + t'}, {a: 1, b: 2});
-		assertEqual(stringifyObjectValues(result.expressions), {d: '(3+t)'});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3});
-	});
-
-	it('should simplify an object with many dependent expressions', () => {
-
-		result = simplifier.simplify({
-			t: 'v + a + x',
-			v: 'a + b',
-			d: '1 + t',
-			w: 'v + 2',
-			z: 'w + v'
-		}, {
-			a: 1,
-			b: 2
+			assertEqual(interpolator.setState({a: 1}), interpolator);
+			assertEqual(interpolator.state, {a: 1});
+			assertEqual(state, {a: 1});
 		});
 
-		assertEqual(stringifyObjectValues(result.expressions), {t: '(4+x)', d: '(1+t)'});
-		assertEqual(result.constants, {a: 1, b: 2, v: 3, w: 5, z: 8});
+		it('should set default options', () => {
+			let interpolator = new Interpolator();
+			const defaultOptions = {
+				resultVariable: 'v',
+				durationVariable: 'd',
+				timeVariable: 't',
+				endVariable: 'e',
+				startTime: 0
+			};
+
+			assertEqual(interpolator.setDefaults(), interpolator);
+			assertEqual(interpolator.defaults, defaultOptions);
+
+			assertEqual(interpolator.setDefaults({a: 1}), interpolator);
+			assertEqual(interpolator.defaults, Object.assign({a: 1}, defaultOptions));
+
+			assertEqual(interpolator.setDefaults({startTime: 1}), interpolator);
+			assertEqual(interpolator.defaults, Object.assign({}, defaultOptions, {startTime: 1}));
+
+		});
+
+		await itAsync('should interpolate values', async () => {
+			let interpolator = new Interpolator();
+			let results, duration;
+			interpolator.handleResults = r => results = r;
+			interpolator.interpolate({v: 't / 2'});
+			assert(interpolator.isRunning);
+			duration = 300;
+			await Promise.delay(duration).then(interpolator.cancel);
+			assert(!interpolator.isRunning);
+			assert(Math.abs(results.v - results.t / 2) < 1);
+
+			interpolator.interpolate({v: 't * 2'});
+			assert(interpolator.isRunning);
+			await Promise.delay(duration).then(interpolator.cancel);
+			assert(!interpolator.isRunning);
+			assert(Math.abs(results.v - results.t * 2) < 1);
+
+			interpolator.interpolate({v: 't * f', f: '2'});
+			await Promise.delay(duration).then(interpolator.cancel);
+			assert(Math.abs(results.v - results.t * 2) < 1);
+
+			interpolator.interpolate({v: 't * f', f: 2});
+			await Promise.delay(duration).then(interpolator.cancel);
+			assert(Math.abs(results.v - results.t * 2) < 1);
+
+			interpolator.interpolate({v: 't * f', f: 'a + 1', a: 1});
+			await Promise.delay(duration).then(interpolator.cancel);
+			assert(Math.abs(results.v - results.t * 2) < 1);
+		});
+
+		it('should handle results', () => {
+			let interpolator = new Interpolator();
+			interpolator.cancel = dummy();
+			interpolator.handleResults({});
+			assertEqual(interpolator.state, {});
+			assertEqual(interpolator.cancel.calls, 0);
+			assertEqual(interpolator.cancel.args, undefined);
+
+			interpolator.handleResults({t: 2}, {duration: 1, timeVariable: 't'});
+			assertEqual(interpolator.state, {t: 2});
+			assertEqual(interpolator.cancel.calls, 1);
+			assertEqual(interpolator.cancel.args, []);
+		});
 	});
 
-});
+
+	await describeAsync('Expression interpolator - e2e tests', async () => {
+
+		let state;
+		let duration = 100;
+		let interpolator = new Interpolator({
+			expressions: {
+				v: '2 * t + 100',
+			},
+			duration: 100
+		});
+		interpolator.on('stateChange', s => state = s);
+		interpolator.cancel = spy(interpolator.cancel);
+		interpolator.handleResults = spy(interpolator.handleResults.bind(interpolator));
+
+		await itAsync('should interpolate expressions, use preset duration', async () => {
+			interpolator.interpolate();
+			assert(interpolator.isRunning);
+			await Promise.delay(duration + 50);
+			assert(!interpolator.isRunning);
+			assert(Math.abs(state.v - (2 * state.t + 100)) < 1);
+		});
+
+		await itAsync('should override default expressions, use variable duration', async () => {
+			interpolator.init({duration: null});
+			interpolator.interpolate({v: '900 - 2 * t', d: 'v'});
+			assert(interpolator.isRunning);
+			await Promise.delay(250);
+			assert(interpolator.isRunning);
+			await Promise.delay(100);
+			assert(!interpolator.isRunning);
+			assert(Math.abs(state.v - 300) < 10);
+		});
+
+	});
+}

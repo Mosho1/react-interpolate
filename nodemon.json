@@ -2,6 +2,6 @@
   "verbose": true,
   "ignore": ["jspm_packages/*", "node_modules/*", "client/*"],
   "execMap": {
-    "js": "babel-node"
+    "js": "babel-node --stage=0"
   }
 }
